@@ -44,5 +44,25 @@ export class Player {
       this.gameObj.flipX = false
       this.gameObj.move(+this.speed, 0)
     })
+    onKeyDown("space" && "", () => {
+      if (this.gameObj.jump(this.jumpForce)) {
+
+      }
+    })
+
+    let canJump = false;
+    onKeyPress("t", () => {
+      canJump = !canJump;
+      console.log("Jumping toggled:", canJump ? "ON" : "OFF");
+    });
+    
+    onKeyDown("space", () => {
+      if (canJump) {
+        this.gameObj.jump(this.jumpForce);
+        console.log("Jumping!");
+      } else {
+        console.log("Jumping is disabled.");
+      }
+    });
   }
 }

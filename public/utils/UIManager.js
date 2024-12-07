@@ -80,12 +80,20 @@ class UIManager {
             pos(80, 0)
         ])
         controlPrompts.add([
+            sprite("T"),
+            pos(-406, -80)
+        ])
+        controlPrompts.add([
             sprite("space"),
             pos(-200, 0)
         ])
         controlPrompts.add([
             text("Jump", { font: "Round", size: 32}),
             pos(-190, 100)
+        ])
+        controlPrompts.add([
+            text("- Toggle Fly Mode!", { font: "Round", size: 32}),
+            pos(-310, -44)
         ])
         controlPrompts.add([
             text("Move", { font: "Round", size: 32}),
