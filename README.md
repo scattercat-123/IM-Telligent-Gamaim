@@ -1,7 +1,8 @@
 # **IM Telligent | Gamaim**  
-[**Click to see the site**](https://im-telligent---gamaim.web.app/)  
+[*Click to see the game site*](https://im-telligent---gamaim.web.app/)  
 
 Welcome to the **IM Telligent | Gamaim** game project! This game is being developed using **Kaboom.js**, a powerful game development library. This README outlines the current progress and features of the game, along with future plans.  
+[*Click to see the game site*](https://im-telligent---gamaim.web.app/)  
 
 <img align="left" src="https://cloud-heja3v4yv-hack-club-bot.vercel.app/0image.png" width="500px" height="300px">
 
@@ -15,6 +16,7 @@ Welcome to the **IM Telligent | Gamaim** game project! This game is being develo
   - **Movement and Controls**: The player can move left and right using the **arrow keys** or **WASD keys**, and jump using the **spacebar**.
   - **Fly Mode**: The player has the option to activate **fly mode** using the **F key** to move freely around the screen.
   - **Respawn**: The player can respawn after dying with the updated system in place.
+  - [*Click to see the game site*](https://im-telligent---gamaim.web.app/)  
 
 * ## What is Planned:
   - **Level Design**: Interactive layouts using custom mappings and tile-based levels.
