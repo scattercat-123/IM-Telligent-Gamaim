@@ -1,10 +1,11 @@
-import { level1Layout, level1Mappings } from "./content/level1/level1Layout.js"
 import kaboom from "./libraries/kaboom.mjs"
 import { Level } from "./utils/level.js"
 import { uiManager } from "./utils/UIManager.js"
 import { load } from "./utils/loader.js"
 import { Player } from "./entities/Player.js"
 import { attachCamera } from "./utils/camera.js"
+import { level1Config } from "./content/level1/config.js"
+import { level1Layout, level1Mappings } from "./content/level1/level1Layout.js"
 
 
 kaboom({
@@ -12,7 +13,6 @@ kaboom({
     height: 720,
     letterbox: true
 })
-
 load.assets()
 load.sounds()
 load.fonts()
@@ -33,14 +33,16 @@ const scenes = {
         level1.drawWaves("water", "wave")
 
         const player = new Player(
-            1500,
-            100,
-            400,
-            650,
-            3,
+            level1Config.playerStartPosX,
+            level1Config.playerStartPosY,
+            level1Config.playerSpeed,
+            level1Config.jumpForce,
+            level1Config.nbLives,
             1,
             false 
           )
+          player.enablePassThrough()
+          player.update()
           attachCamera(player.gameObj, 0, 200)
     },
     gameover: () => {

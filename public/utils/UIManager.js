@@ -14,7 +14,7 @@ class UIManager {
                 message.opacity,
                 0,
                 0.5,
-                (opacity) => (message.opacity = opacity),
+                (nextOpacityValue) => (message.opacity = nextOpacityValue),
                 easings.linear
             );
             message.enterState("flash-down");
