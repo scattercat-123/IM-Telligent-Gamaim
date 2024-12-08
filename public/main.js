@@ -20,18 +20,40 @@ load.fonts()
 const scenes = {
     menu: () => {
         uiManager.displayMainMenu()
+        const bgSound = play("bgmusic", {
+            loop : true,
+            volume : 0.3
+        })
+        onSceneLeave(() =>{
+            bgSound.paused = true
+         }
+         )
     },
     controls: () => {
         uiManager.displayControlsMenu()
+        const bgSound = play("bgmusic", {
+            loop : true,
+            volume : 0.3
+        })
+        onSceneLeave(() =>{
+            bgSound.paused = true
+         }
+         )
+
     },
     1: () => {
-        setGravity(1440)
-        const level1 = new Level()
-        level1.drawBackground("forest-background")
-        level1.drawMapLayout(level1Layout, level1Mappings)
-
-        level1.drawWaves("water", "wave")
-
+        const WaterAmbience = play("water-ambience", {
+            loop: true,
+            volume: 0 // Start with zero volume
+        });
+        
+        setGravity(1440);
+        const level1 = new Level();
+        level1.drawBackground("forest-background");
+        level1.drawMapLayout(level1Layout, level1Mappings);
+    
+        level1.drawWaves("water", "wave");
+    
         const player = new Player(
             level1Config.playerStartPosX,
             level1Config.playerStartPosY,
@@ -40,10 +62,30 @@ const scenes = {
             level1Config.nbLives,
             1,
             false 
-          )
-          player.enablePassThrough()
-          player.update()
-          attachCamera(player.gameObj, 0, 200)
+        );
+        player.enableCoinPickUp();
+        player.enablePassThrough();
+        player.update();
+        attachCamera(player.gameObj, 0, 200);
+    
+        // Update the water ambience volume based on the player's distance from the water
+        const waterLevelY = level1Config.waterLevelY || 500; // Example Y-coordinate for water level, adjust as needed
+    
+        // Function to calculate and update volume based on distance
+        function updateWaterAmbienceVolume() {
+            const distance = Math.abs(player.gameObj.pos.y - waterLevelY); // Get vertical distance from water
+            const maxDistance = 600; // Maximum distance at which the sound volume is 0
+            const minDistance = 100; // Minimum distance at which the sound volume is full (1)
+        
+            // Adjust the volume change to be more noticeable
+            const volume = Math.max(0, Math.min(1, 1 - (distance - minDistance) / (maxDistance - minDistance)));
+            WaterAmbience.volume = (volume * 0.4) - 0.08;
+        }
+    
+        // Update the volume every frame
+        onUpdate(() => {
+            updateWaterAmbienceVolume();
+        });
     },
     gameover: () => {
 
@@ -57,3 +99,5 @@ for (const key in scenes) {
 }
 
 go("menu")
+
+                  
