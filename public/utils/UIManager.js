@@ -1,7 +1,46 @@
 class UIManager {
+    displayLivesCount(player) {
+        this.livesCountUI = add([
+          text("", {
+            font: "Round",
+            size: 50,
+          }),
+          fixed(),
+          pos(70, 75),
+        ])
+    
+        this.livesCountUI.add([
+          sprite("heart-icon"),
+          pos(-60, -5),
+          scale(0.8),
+          fixed(),
+        ])
+      }
+
+    displayCoinCount(player) {
+        this.coinCountUI = add([
+            text("", {
+                font: "Round",
+                size: 50
+            }),
+
+            {
+                fullCoinCount: get("coin", { recursive: true }).length
+            },
+            fixed(),
+            pos(70, 16 )
+        ])
+        this.coinCountUI.add([
+            sprite("coin-icon"),
+            pos(-60, 0),
+            fixed(),
+            scale(3)
+        ])
+    }
+
     displayBlinkingUIMessage(content, position) {
         const message = add([
-            text(content, { size: 30, font: "Round" }),
+            text(content, { size: 35, font: "Round" }),
             area(),
             anchor("center"),
             pos(position),
@@ -31,7 +70,6 @@ class UIManager {
             message.enterState("flash-up");
         });
     }
-
     displayMainMenu() {
         add([sprite("forest-background"), scale(4)]);
         add([
@@ -42,14 +80,26 @@ class UIManager {
             pos(center().x, center().y - 200),
             scale(6),
         ]);
+        add([
+            text("Music phonk made by Atharv", { size: 25, font: "Round" }),
+            area(),
+            anchor("center"),
+            pos(center().x + 340, center().y + 340),
+        ]);
+        add([
+            text("Can you notice IM-Teligent in this phonk?", { size: 20, font: "Round" }),
+            area(),
+            anchor("center"),
+            pos(center().x - 340, center().y + 340),
+        ]);
 
         this.displayBlinkingUIMessage(
-            "Press [ Enter ] and go to controls before starting the game",
-            vec2(center().x, center().y + 100)
+            "Press [ Enter ] x2 and go to controls before starting the game",
+            vec2(center().x, center().y)
         )
         onKeyPress("enter", () => {
             play("confirm-ui"),
-            go("controls")
+                go("controls")
         })
     }
     displayControlsMenu() {
@@ -88,15 +138,15 @@ class UIManager {
             pos(-200, 0)
         ])
         controlPrompts.add([
-            text("Jump", { font: "Round", size: 32}),
+            text("Jump", { font: "Round", size: 32 }),
             pos(-190, 100)
         ])
         controlPrompts.add([
-            text("- Toggle Fly Mode!", { font: "Round", size: 32}),
+            text("- Toggle Fly Mode!", { font: "Round", size: 32 }),
             pos(-310, -44)
         ])
         controlPrompts.add([
-            text("Move", { font: "Round", size: 32}),
+            text("Move", { font: "Round", size: 32 }),
             pos(10, 100)
         ])
 
@@ -104,12 +154,15 @@ class UIManager {
             "Press [ Enter ] to Start Game",
             vec2(center().x, center().y + 300)
         )
-    
+
         onKeyPress("enter", () => {
             play("confirm-ui"),
-            go(1)
+                go(1)
         })
-    }  
+    }
+    addDarkBg(){
+        add([rect(270, 130), color(Color.fromHex('#000000')), fixed()]  )
+    }
 }
 
 export const uiManager = new UIManager();

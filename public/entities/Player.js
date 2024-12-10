@@ -4,6 +4,7 @@ export class Player {
   isMoving = false
   hasJumpedOnce = false
   coyoteLapse = 0.1
+  coins = 0
   constructor(
     posX,
     posY,
@@ -11,9 +12,9 @@ export class Player {
     jumpForce,
     nbLives,
     currentLevelScene,
-    isInTerminalScene
+    isInFinalLevel
   ) {
-    this.isInTerminalScene = isInTerminalScene
+    this.isInFinalLevel = isInFinalLevel
     this.currentLevelScene = currentLevelScene
     this.initialX = posX
     this.initialY = posY
@@ -119,10 +120,20 @@ export class Player {
   }
   respawnPlayer() {
     if (this.lives > 0) {
+      this.lives--
       this.gameObj.pos = vec2(this.initialX, this.initialY)
       this.isRespawning = true
       setTimeout(() => this.isRespawning = false, 800)
+      return
     }
+    go("gameover")
+  }
+  enableMobVunerability() {
+    function hitAndRespawn(context) {
+      play("hit", { speed: 1.5 })
+      context.respawnPlayer()
+    }
+    this.gameObj.onCollide("spiders", () => hitAndRespawn(this))
   }
   update() {
     onUpdate(() => {
@@ -156,6 +167,20 @@ export class Player {
         this.gameObj.curAnim() !== "jump-down"
       ) {
         this.gameObj.play("jump-down")
+      }
+    })
+  }
+  updateLives(livesCountUI) {
+    onUpdate(() => {
+      livesCountUI.text = `${this.lives}`
+    })
+  }
+
+  updateCoinCount(coinCountUI) {
+    onUpdate(() => {
+      coinCountUI.text = `${this.coins} / ${coinCountUI.fullCoinCount}`
+      if (this.coins === coinCountUI.fullCoinCount) {
+        go(this.isInFinalLevel ? "end" : this.currentLevelScene + 1)
       }
     })
   }
