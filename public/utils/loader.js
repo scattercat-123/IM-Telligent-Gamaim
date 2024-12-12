@@ -10,6 +10,8 @@ export const load = {
     loadSprite("right", "./assets/Arrow_Right_Key_Dark.png")
     loadSprite("space", "./assets/Space_Key_Dark.png")
     loadSprite("T", "./assets/T_Key_Dark.png")
+    loadSprite("W", "./assets/W_Key_Dark.png")
+    loadSprite("R", "./assets/R_Key_Dark.png")
 
     loadSprite("coin-icon", "./assets/Coins_Ui.png")
     loadSprite("star-icon", "./assets/Stars_Ui.png")
@@ -100,14 +102,7 @@ export const load = {
         },
       },
     })
-    loadSprite("fish-1", "./assets/Fish_1.png", {
-      sliceX: 2,
-      sliceY: 1,
-      anims: {
-        swim: { from: 0, to: 1, loop: true },
-      },
-    })
-    loadSprite("fish-2", "./assets/Fish_2.png", {
+    loadSprite("fish", "./assets/Fish_1.png", {
       sliceX: 2,
       sliceY: 1,
       anims: {
@@ -164,14 +159,7 @@ export const load = {
         },
       },
     })
-    loadSprite("flame-1", "./assets/Flame_1.png", {
-      sliceX: 2,
-      sliceY: 1,
-      anims: {
-        burn: { from: 0, to: 1, loop: true },
-      },
-    })
-    loadSprite("flame-2", "./assets/Flame_2.png", {
+    loadSprite("flame", "./assets/Flame_1.png", {
       sliceX: 2,
       sliceY: 1,
       anims: {
@@ -227,19 +215,7 @@ export const load = {
         }
       },
     })
-    loadSprite("bird-1", "./assets/Bird_1.png", {
-      sliceX: 3,
-      sliceY: 1,
-      anims: {
-        fly: {
-          from: 0,
-          to: 2,
-          speed: 9,
-          loop: true,
-        },
-      },
-    })
-    loadSprite("bird-2", "./assets/Bird_2.png", {
+    loadSprite("bird", "./assets/Bird_2.png", {
       sliceX: 3,
       sliceY: 1,
       anims: {
@@ -266,5 +242,7 @@ export const load = {
     loadSound("strong-wind", "./sounds/strong-wind.wav")
     loadSound("dive", "./sounds/dive.wav")
     loadSound("bgmusic", "./sounds/IM_Telligent_Gamaim.mp3")
+    loadSound("gameover", "./sounds/gameover.mp3")
+    loadSound("gameend", "./sounds/victory.mp3")
   },
 }

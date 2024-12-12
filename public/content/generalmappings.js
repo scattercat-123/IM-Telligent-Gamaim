@@ -69,5 +69,6 @@ export function generateMappings(tileType) {
     ],
     o: () => [sprite("bridge"), area(), body({ isStatic: true }), offscreen()],
     "@": () => [sprite("coin"), area(), "coin", offscreen()],
+    "!": () => [sprite("heart-icon"), area(), "heart-icon", offscreen(), scale(0.2)],
   }
 }

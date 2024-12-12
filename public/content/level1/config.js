@@ -2,7 +2,7 @@ export const level1Config = {
     gravity: 1400,
     playerSpeed : 400,
     jumpForce : 650,
-    nbLives : 3,
+    nbLives : 2,
     playerStartPosX: 1500,
     playerStartPosY: 100,
     fishPositions: [
@@ -13,8 +13,7 @@ export const level1Config = {
         () => vec2(5200, 800),
         () => vec2(5300, 800),
       ],
-      fishAmplitudes: [300, 500, 400, 500, 900, 800],
-      fishType: 1,
+      fishRanges: [300, 500, 400, 500, 900, 800],
     spiderPositions: [
         () => vec2(2000, 300),
         () => vec2(2020, 0),
@@ -22,6 +21,6 @@ export const level1Config = {
         () => vec2(3500, 300),
       ],
       spiderAmplitudes: [300, 150, 150, 300],
-      spiderSpeeds: [2, 1, 1, 2],
+      spiderTime: [2, 1, 1, 2],
       spiderType: 1
 }

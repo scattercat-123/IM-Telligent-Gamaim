@@ -9,12 +9,12 @@ export class Fish {
         for (const position of positions) {
             this.projectiles.push(
                 add([
-                    sprite(`fish-${type}`, { anim: animMap[type] }),
+                    sprite(type, { anim: animMap[type] }),
                     area({ shape: new Rect(vec2(0), 12, 12) }),
                     anchor("center"),
                     pos(position),
                     scale(4),
-                    rotate(90),
+                    rotate(type === "fish" ? 90 : 0),
                     state("launch", ["launch", "rotate", "fall"]),
                     offscreen(),
                     "fish",
@@ -26,10 +26,9 @@ export class Fish {
     setMovementPattern() {
         for (const [index, projectiles] of this.projectiles.entries()) {
             const launch = projectiles.onStateEnter("launch", async () => {
-                if (projectiles.currAnim !== "swim") projectiles.play("swim");
-                projectiles.flipY = false;
+                projectiles.flipX = false;
                 await tween(
-                    projectiles.pos.y,
+                    projectiles.pos.y,  
                     projectiles.pos.y - this.ranges[index],
                     2,
                     (posY) => (projectiles.pos.y = posY),
@@ -37,10 +36,9 @@ export class Fish {
                 );
                 projectiles.enterState("fall");
             });
-            
+
             const fall = projectiles.onStateEnter("fall", async () => {
-                if (projectiles.currAnim !== "swim") projectiles.play("swim");
-                projectiles.flipY = true;
+                projectiles.flipX = true;
                 await tween(
                     projectiles.pos.y,
                     projectiles.pos.y + this.ranges[index],
@@ -50,9 +48,12 @@ export class Fish {
                 );
                 projectiles.enterState("launch");
             });
-            
-                }
+            onSceneLeave(() => {
+                launch.cancel()
+                fall.cancel()
+            })
 
-            }
+        }
+
     }
-    
+}

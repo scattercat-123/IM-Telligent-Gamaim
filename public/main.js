@@ -5,6 +5,9 @@ import { load } from "./utils/loader.js"
 import { Player } from "./entities/Player.js"
 import { Fish } from "./entities/Fish.js"
 import { Spiders } from "./entities/Spiders.js"
+import { Axes } from "./entities/Axes.js"
+import { Saws } from "./entities/Saws.js"
+import { Birds } from "./entities/Birds.js"
 import { attachCamera } from "./utils/camera.js"
 import { level1Config } from "./content/level1/config.js"
 import { level1Layout, level1Mappings } from "./content/level1/level1Layout.js"
@@ -12,8 +15,7 @@ import { level2Config } from "./content/level2/config.js"
 import { level2Layout, level2Mappings } from "./content/level2/level2Layout.js"
 import { level3Config } from "./content/level3/config.js"
 import { level3Layout, level3Mappings } from "./content/level3/level3Layout.js"
-
-
+import { bgSoundManager } from "./utils/BGSoundManager.js"
 kaboom({
     width: 1280,
     height: 720,
@@ -23,13 +25,12 @@ load.assets()
 load.sounds()
 load.fonts()
 
-let bgSound; // Declare bgSound globally
+let bgSound; 
 
 const scenes = {
     menu: () => {
         uiManager.displayMainMenu();
 
-        // Start bgSound only if it hasn't been started or is paused
         if (!bgSound) {
             bgSound = play("bgmusic", {
                 loop: true,
@@ -54,7 +55,7 @@ const scenes = {
     1: () => {
         const WaterAmbience = play("water-ambience", {
             loop: true,
-            volume: 0 // Start with zero volume
+            volume: 0 
         });
 
         setGravity(1440);
@@ -75,19 +76,20 @@ const scenes = {
         );
         player.enableMobVunerability();
         player.enableCoinPickUp();
+        player.enableHeartPickUp();
         player.enablePassThrough();
         player.update();
         attachCamera(player.gameObj, 0, 200);
         const spiders = new Spiders(
             level1Config.spiderPositions.map((spiderPos) => spiderPos()),
             level1Config.spiderAmplitudes,
-            level1Config.spiderSpeeds,
+            level1Config.spiderTime,
             level1Config.spiderType
         )
         const fish = new Fish(
             level1Config.fishPositions.map(fishPos => fishPos()),
-            level1Config.fishAmplitudes,
-            level1Config.fishType
+            level1Config.fishRanges,
+            "fish"
         )
         fish.setMovementPattern()
         spiders.setMovementPattern()
@@ -98,21 +100,18 @@ const scenes = {
 
         player.updateLives(uiManager.livesCountUI)
         player.updateCoinCount(uiManager.coinCountUI)
-        // Update the water ambience volume based on the player's distance from the water
-        const waterLevelY = level1Config.waterLevelY || 500; // Example Y-coordinate for water level, adjust as needed
 
-        // Function to calculate and update volume based on distance
+        const waterLevelY = level1Config.waterLevelY || 500; 
+
         function updateWaterAmbienceVolume() {
-            const distance = Math.abs(player.gameObj.pos.y - waterLevelY); // Get vertical distance from water
-            const maxDistance = 600; // Maximum distance at which the sound volume is 0
-            const minDistance = 100; // Minimum distance at which the sound volume is full (1)
+            const distance = Math.abs(player.gameObj.pos.y - waterLevelY); 
+            const maxDistance = 600; 
+            const minDistance = 100; 
 
-            // Adjust the volume change to be more noticeable
             const volume = Math.max(0, Math.min(1, 1 - (distance - minDistance) / (maxDistance - minDistance)));
             WaterAmbience.volume = (volume * 0.4) - 0.1;
         }
 
-        // Update the volume every frame
         onUpdate(() => {
             updateWaterAmbienceVolume();
         });
@@ -122,9 +121,10 @@ const scenes = {
         )
     },
     2: () => {
+        
         const lavaAmbience = play("lava-ambience", {
             loop: true,
-            volume: 0 // Start with zero volume
+            volume: 0 
         });
 
         setGravity(1440);
@@ -143,9 +143,36 @@ const scenes = {
             2,
             false
         );
+        player.enableMobVunerability();
+        player.enableHeartPickUp()
         player.enableCoinPickUp();
         player.enablePassThrough();
         player.update();
+        const spiders = new Spiders(
+            level2Config.spiderPositions.map((spiderPos) => spiderPos()),
+            level2Config.spiderAmplitudes,
+            level2Config.spiderTime,
+            level2Config.spiderType
+        )
+        spiders.enablePassthrough()
+        spiders.setMovementPattern()
+        const flame = new Fish(
+            level2Config.flamePositions.map(flamePos => flamePos()),
+            level2Config.flameRanges,
+            "flame"
+        )
+        flame.setMovementPattern()
+        const axes = new Axes(
+            level2Config.axesPositions.map(axePos => axePos()),
+            level2Config.axesSwingDurations
+        )
+        axes.setMovementPattern()
+        const saws = new Saws(
+            level2Config.sawPositions.map(sawPos => sawPos()),
+            level2Config.sawSwingRanges
+        )
+        saws.setMovementPattern()
+
         attachCamera(player.gameObj, 0, 200);
 
         uiManager.addDarkBg()
@@ -154,16 +181,13 @@ const scenes = {
 
         player.updateLives(uiManager.livesCountUI)
         player.updateCoinCount(uiManager.coinCountUI)
-        // Update the water ambience volume based on the player's distance from the water
-        const lavaLevelY = level2Config.lavaLevelY || 500; // Example Y-coordinate for water level, adjust as needed
 
-        // Function to calculate and update volume based on distance
+        const lavaLevelY = level2Config.lavaLevelY || 500;
+
         function updateLavaAmbienceVolume() {
-            const distance = Math.abs(player.gameObj.pos.y - lavaLevelY); // Get vertical distance from water
-            const maxDistance = 600; // Maximum distance at which the sound volume is 0
-            const minDistance = 100; // Minimum distance at which the sound volume is full (1)
-
-            // Adjust the volume change to be more noticeable
+            const distance = Math.abs(player.gameObj.pos.y - lavaLevelY);
+            const maxDistance = 600;
+            const minDistance = 100;
             const volume = Math.max(0, Math.min(1, 1 - (distance - minDistance) / (maxDistance - minDistance)));
             lavaAmbience.volume = (volume * 0.4) + 0.1;
         }
@@ -174,7 +198,7 @@ const scenes = {
     3: () => {
         const WindAmbience = play("strong-wind", {
             loop: true,
-            volume: 0 // Start with zero volume
+            volume: 0
         });
 
         setGravity(1440);
@@ -195,9 +219,15 @@ const scenes = {
             3,
             true
         );
+        player.enableMobVunerability()
         player.enableCoinPickUp();
         player.enablePassThrough();
         player.update();
+        const birds = new Birds(
+            level3Config.birdPositions.map(birdPos => birdPos()),
+            level3Config.birdRanges
+        )
+        birds.setMovementPattern()
         attachCamera(player.gameObj, 0, 200);
         uiManager.addDarkBg()
         uiManager.displayLivesCount(player)
@@ -205,16 +235,14 @@ const scenes = {
 
         player.updateLives(uiManager.livesCountUI)
         player.updateCoinCount(uiManager.coinCountUI)
-        // Update the water ambience volume based on the player's distance from the water
-        const rockLevelY = level3Config.rockLevelY || 500; // Example Y-coordinate for water level, adjust as needed
 
-        // Function to calculate and update volume based on distance
+        const rockLevelY = level3Config.rockLevelY || 500; 
+
         function updateWindAmbienceVolume() {
-            const distance = Math.abs(player.gameObj.pos.y - rockLevelY); // Get vertical distance from water
-            const maxDistance = 600; // Maximum distance at which the sound volume is 0
-            const minDistance = 100; // Minimum distance at which the sound volume is full (1)
+            const distance = Math.abs(player.gameObj.pos.y - rockLevelY); 
+            const maxDistance = 600; 
+            const minDistance = 100; 
 
-            // Adjust the volume change to be more noticeable
             const volume = Math.max(0, Math.min(1, 1 - (distance - minDistance) / (maxDistance - minDistance)));
             WindAmbience.volume = (volume * 0.4) + 0.1;
         }
@@ -223,10 +251,14 @@ const scenes = {
         });
     },
     gameover: () => {
-
+        bgSoundManager.pauseAllSounds()
+        uiManager.displayGameOverScreen()
+        play("gameover")
     },
     end: () => {
-
+        bgSoundManager.pauseAllSounds()
+        uiManager.displayEndGameScreen()
+        play("gameend")
     }
 }
 for (const key in scenes) {
@@ -234,3 +266,4 @@ for (const key in scenes) {
 }
 
 go("menu")
+                             

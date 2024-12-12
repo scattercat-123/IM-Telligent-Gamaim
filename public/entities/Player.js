@@ -3,7 +3,7 @@ export class Player {
   isRespawning = false
   isMoving = false
   hasJumpedOnce = false
-  coyoteLapse = 0.1
+  coyoteLapse = 0.2
   coins = 0
   constructor(
     posX,
@@ -55,8 +55,18 @@ export class Player {
       play("coin")
     })
   }
+  enableHeartPickUp() {
+    this.gameObj.onCollide("heart-icon", (heart) => {
+      this.lives++
+      destroy(heart)
+      play("coin")
+    })
+  }
 
   setPlayerControls() {
+    onKeyDown("r", () => {
+      go("controls")
+    })
     onKeyDown("left", () => {
       if (this.gameObj.curAnim() !== "run") this.gameObj.play("run")
       this.gameObj.flipX = true
@@ -90,26 +100,63 @@ export class Player {
     onKeyDown("space", () => {
       if (canJump && (!this.isRespawning)) {
         this.gameObj.jump(this.jumpForce);
-      } else {
       }
     })
-    onKeyDown((key) => {
-      if ((key === "space" || key === "w" || key === "up") && this.gameObj.isGrounded() && (!this.isRespawning)) {
-        this.hasJumpedOnce = false
-        this.gameObj.jump(this.jumpForce);
-        play("jump");
+    onKeyDown("space", () => {
+      if (this.gameObj.paused) return
+      if (this.gameObj.isGrounded() && !this.isRespawning) {
+        this.hasJumpedOnce = true
+        this.gameObj.jump(this.jumpForce)
+        play("jump")
+      }
 
+      //coyote time
+      if (
+        !this.gameObj.isGrounded() &&
+        time() - this.timeSinceLastGrounded < this.coyoteLapse &&
+        !this.hasJumpedOnce
+      ) {
+        this.hasJumpedOnce = true
+        this.gameObj.jump(this.jumpForce)
+        play("jump")
+      }
+    })
+    onKeyDown("w", () => {
+      if (this.gameObj.paused) return
+      if (this.gameObj.isGrounded() && !this.isRespawning) {
+        this.hasJumpedOnce = true
+        this.gameObj.jump(this.jumpForce)
+        play("jump")
+      }
 
-        if (
-          !this.gameObj.isGrounded() &&
-          time() - this.timeSinceLastGrounded < this.coyoteLapse &&
-          !this.hasJumpedOnce
-        ) {
-          this.hasJumpedOnce = true
-          this.gameObj.jump(this.jumpForce)
-          play("jump")
-        }
+      //coyote time
+      if (
+        !this.gameObj.isGrounded() &&
+        time() - this.timeSinceLastGrounded < this.coyoteLapse &&
+        !this.hasJumpedOnce
+      ) {
+        this.hasJumpedOnce = true
+        this.gameObj.jump(this.jumpForce)
+        play("jump")
+      }
+    })
+    onKeyDown("up", () => {
+      if (this.gameObj.paused) return
+      if (this.gameObj.isGrounded() && !this.isRespawning) {
+        this.hasJumpedOnce = true
+        this.gameObj.jump(this.jumpForce)
+        play("jump")
+      }
 
+      //coyote time
+      if (
+        !this.gameObj.isGrounded() &&
+        time() - this.timeSinceLastGrounded < this.coyoteLapse &&
+        !this.hasJumpedOnce
+      ) {
+        this.hasJumpedOnce = true
+        this.gameObj.jump(this.jumpForce)
+        play("jump")
       }
     })
     onKeyRelease(() => {
@@ -133,7 +180,11 @@ export class Player {
       play("hit", { speed: 1.5 })
       context.respawnPlayer()
     }
+    this.gameObj.onCollide("fish", () => hitAndRespawn(this))
     this.gameObj.onCollide("spiders", () => hitAndRespawn(this))
+    this.gameObj.onCollide("axes", () => hitAndRespawn(this))
+    this.gameObj.onCollide("saws", () => hitAndRespawn(this))
+    this.gameObj.onCollide("birds", () => hitAndRespawn(this))
   }
   update() {
     onUpdate(() => {

@@ -4,12 +4,12 @@ export const level2Mappings = generateMappings("brick")
 
 export const level2Layout = [
   [
-    "                                                                                                                                            ",
-    "                                                                                                                                            ",
-    "                                 @ 9aab                                                                                                     ",
+    "                                                                      !                                                                     ",
+    "                                                                      9                                                                     ",
+    "                                 @@9aab                                                                                                     ",
     "                                   cdde                                                                                                     ",
-    "                           @   9aabcdde                9aab                      @                           @  @  @                        ",
-    "                               cddecdde                cdde                                               0111111111112                     ",
+    "                           @   9aabcdde                9aab           9          @                           @  @  @                        ",
+    "                               cddecdde                cdde               9                               0111111111112                     ",
     "                           9aabcddecdde                cdde 9aab                9aab    9aaaboooo9aaab    3444444444445                     ",
     "                           cddecddecdde                cdde cdde          @     cdde    cddde    cddde    3444444444445         @           ",
     "                           cddecddecdde                cdde cdde                cdde    cddde    cddde    3444444444445       @           @ ",

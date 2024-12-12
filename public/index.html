@@ -1,9 +1,28 @@
-<!DOCTYPE html>
-    <head>
-        <title>Im-Telligent | Gamaim</title>
-        <link rel="icon" type="image/x-icon" href="assets/Logo.png">
-    </head>
-    <body>
-        <script type="module" src="main.js"></script>
-    </body>
-</html> 
+<!Doctype html>
+
+<head>
+    <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
+</head>
+
+<body>
+    <script type="module" src="main.js"></script>
+</body>
+    <script type="module">
+        import {initializeApp} from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
+        import {getAnalytics} from "https://www.gstatic.com/firebasejs/11.1.0/firebase-analytics.js";
+        const firebaseConfig = {
+            apiKey: "AIzaSyAoGtrWrau3Mw6RZNKtLKLT4JPtvO4hGA4",
+        authDomain: "im-telligent---gamaim.firebaseapp.com",
+        databaseURL: "https://im-telligent---gamaim-default-rtdb.firebaseio.com",
+        projectId: "im-telligent---gamaim",
+        storageBucket: "im-telligent---gamaim.firebasestorage.app",
+        messagingSenderId: "1001358363891",
+        appId: "1:1001358363891:web:b2221287bc57251b5f3b86",
+        measurementId: "G-ZXG8JMRH86"
+  };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+</script>
+
+</html>
