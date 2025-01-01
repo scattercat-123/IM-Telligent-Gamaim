@@ -52,6 +52,18 @@ const scenes = {
             }
         });
     },
+    level: () => {
+        uiManager.displayLevelMenu();
+        if (bgSound && bgSound.paused) {
+            bgSound.paused = false;
+        }
+
+        onSceneLeave(() => {
+            if (bgSound) {
+                bgSound.paused = true;
+            }
+        });
+    },
     1: () => {
         const WaterAmbience = play("water-ambience", {
             loop: true,

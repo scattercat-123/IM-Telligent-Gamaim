@@ -70,6 +70,25 @@ class UIManager {
             message.enterState("flash-up");
         });
     }
+    displayLevelMenu() {
+        add([sprite("forest-background"), scale(4)]);
+        add([
+            sprite("logo"),
+            fixed(),
+            area(),
+            anchor("center"),
+            pos(center().x, center().y - 200),
+            scale(6),
+        ]);
+        this.displayBlinkingUIMessage(
+            "Press 1 / 2 / 3 for Level 1 / 2 / 3",
+            vec2(center().x, center().y)
+        )
+        onKeyPress("enter", () => {
+            play("confirm-ui"),
+                go("controls")
+        })
+    }
     displayMainMenu() {
         add([sprite("forest-background"), scale(4)]);
         add([
@@ -195,7 +214,7 @@ class UIManager {
 
         onKeyPress("enter", () => {
             play("confirm-ui"),
-                go(1)
+                go("level")
         })
     }
     displayGameOverScreen() {
